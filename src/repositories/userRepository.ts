@@ -1,6 +1,7 @@
 import type { User } from "@prisma/client";
 import { db } from "../utils/database";
 import { RegisterUser } from "../models/user/userRegister";
+import { compareHash } from "../utils/security";
 
 export async function getUserByEmail(email: string): Promise<User | null> {
   const user = await db.user.findUnique({
@@ -10,6 +11,18 @@ export async function getUserByEmail(email: string): Promise<User | null> {
   });
   return user;
 }
+
+export async function getUserByCredentials(
+  email: string,
+  password: string,
+): Promise<User | null> {
+  const user = await getUserByEmail(email);
+  if (!user) return null;
+  const doesPasswordMatch = await compareHash(password, user.passwordHash);
+  if (!doesPasswordMatch) return null;
+  return user;
+}
+
 export async function createUser(user: RegisterUser): Promise<User> {
   const created = await db.user.create({
     data: {
