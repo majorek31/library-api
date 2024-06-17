@@ -18,7 +18,7 @@ app.post("/register", zValidator("json", RegisterValidator), async (c) => {
       });
     }
     const passwordHash = await generatePasswordHash(password);
-    const user = await createUser({
+    await createUser({
       name: name,
       lastName: lastname,
       email: email,
