@@ -2,8 +2,13 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { HTTPException } from "hono/http-exception";
 import { RegisterValidator } from "../../validators/registrationValidator";
-import { getUserByEmail, createUser } from "../../repositories/userRepository";
-import { generatePasswordHash } from "../../utils/security";
+import {
+  getUserByEmail,
+  createUser,
+  getUserByCredentials,
+} from "../../repositories/userRepository";
+import { createAccessToken, generatePasswordHash } from "../../utils/security";
+import { LoginValidator } from "../../validators/loginValidator";
 
 const app = new Hono();
 
@@ -34,6 +39,14 @@ app.post("/register", zValidator("json", RegisterValidator), async (c) => {
       cause: error,
     });
   }
+});
+
+app.get("/login", zValidator("query", LoginValidator), async (c) => {
+  const { email, password } = c.req.query();
+  const user = await getUserByCredentials(email, password);
+  if (!user) return c.body(null, 404);
+  const token = await createAccessToken(user);
+  return c.json(token);
 });
 
 export default app;
