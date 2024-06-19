@@ -10,7 +10,7 @@ const app = new Hono();
 app.use(logger());
 
 app.route("/api", apiRoutes);
-const port = 3000;
+const port = process.env.PORT || 3000;
 console.log(`Server is running on port ${port}`);
 
 serve({
