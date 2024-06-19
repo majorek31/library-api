@@ -35,3 +35,22 @@ export async function createUser(user: RegisterUser): Promise<User> {
   });
   return created;
 }
+
+export async function updateUser(user: User): Promise<void> {
+  await db.user.update({
+    where: {
+      id: user.id,
+    },
+    data: user,
+  });
+}
+
+export async function getUserByRefreshToken(
+  refreshToken: string,
+): Promise<User | null> {
+  return await db.user.findFirst({
+    where: {
+      refreshToken: refreshToken,
+    },
+  });
+}

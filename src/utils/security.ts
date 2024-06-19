@@ -3,6 +3,11 @@ import type { AccessToken } from "../models/auth/accessToken";
 import type { User } from "@prisma/client";
 import { sign } from "hono/jwt";
 import { JWTPayload } from "hono/utils/jwt/types";
+import { randomBytes } from "crypto";
+import {
+  getUserByRefreshToken,
+  updateUser,
+} from "../repositories/userRepository";
 
 export async function generatePasswordHash(password: string): Promise<string> {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,8 +39,25 @@ export async function createAccessToken(user: User): Promise<AccessToken> {
     } as TokenPayload,
     secret,
   );
+  const refreshToken = await createRefreshToken(user);
   return {
     token,
+    refreshToken,
     expires: expirationDate,
   };
+}
+
+export async function createRefreshToken(user: User): Promise<string> {
+  const refreshToken = Buffer.from(randomBytes(64)).toString("base64");
+  user.refreshToken = refreshToken;
+  await updateUser(user);
+  return refreshToken;
+}
+
+export async function refreshAccessToken(
+  refreshToken: string,
+): Promise<AccessToken | null> {
+  const user = await getUserByRefreshToken(refreshToken);
+  if (!user) return null;
+  return await createAccessToken(user);
 }

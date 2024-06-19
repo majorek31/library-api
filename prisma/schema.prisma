@@ -21,5 +21,6 @@ model User {
   lastName     String
   email        String   @unique
   passwordHash String
+  refreshToken String?
   birthDay     DateTime
 }
