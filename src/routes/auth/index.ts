@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { HTTPException } from "hono/http-exception";
 import { RegisterValidator } from "../../validators/registrationValidator";
 import {
   getUserByEmail,
@@ -18,32 +17,25 @@ import { validate } from "../../validators/validate";
 const app = new Hono();
 
 app.post("/register", validate("json", RegisterValidator), async (c) => {
-  try {
-    const { name, lastname, email, password, birthday } = await c.req.json();
-    const doesUserExist = await getUserByEmail(email);
-    if (doesUserExist !== null) {
-      c.status(400);
-      return c.json({
+  const { name, lastname, email, password, birthday } = await c.req.json();
+  const user = await getUserByEmail(email);
+  if (!!user) {
+    return c.json(
+      {
         message: "email is not avaliable",
-      });
-    }
-    const passwordHash = await generatePasswordHash(password);
-    await createUser({
-      name: name,
-      lastName: lastname,
-      email: email,
-      passwordHash: passwordHash,
-      birthDay: new Date(birthday),
-    });
-    c.status(201);
-    return c.body(null);
-  } catch (error) {
-    console.log(error);
-    throw new HTTPException(500, {
-      message: "Internal server error",
-      cause: error,
-    });
+      },
+      406,
+    );
   }
+  const passwordHash = await generatePasswordHash(password);
+  await createUser({
+    name: name,
+    lastName: lastname,
+    email: email,
+    passwordHash: passwordHash,
+    birthDay: new Date(birthday),
+  });
+  return c.body(null, 201);
 });
 
 app.get("/login", validate("query", LoginValidator), async (c) => {
