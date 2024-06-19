@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import type { AccessToken } from "../models/auth/accessToken";
 import type { User } from "@prisma/client";
-import { sign } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 import { JWTPayload } from "hono/utils/jwt/types";
 import { randomBytes } from "crypto";
 import {
@@ -60,4 +60,14 @@ export async function refreshAccessToken(
   const user = await getUserByRefreshToken(refreshToken);
   if (!user) return null;
   return await createAccessToken(user);
+}
+
+export async function decodeToken(token: string): Promise<TokenPayload | null> {
+  try {
+    const secret = process.env.JWT_SECRET;
+    const decoded = (await verify(token, secret)) as TokenPayload;
+    return decoded;
+  } catch (error) {
+    return null;
+  }
 }
