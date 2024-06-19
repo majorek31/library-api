@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { zValidator } from "@hono/zod-validator";
 import { HTTPException } from "hono/http-exception";
 import { RegisterValidator } from "../../validators/registrationValidator";
 import {
@@ -14,10 +13,11 @@ import {
 } from "../../utils/security";
 import { LoginValidator } from "../../validators/loginValidator";
 import { RefreshTokenValidator } from "../../validators/refreshTokenValidator";
+import { validate } from "../../validators/validate";
 
 const app = new Hono();
 
-app.post("/register", zValidator("json", RegisterValidator), async (c) => {
+app.post("/register", validate("json", RegisterValidator), async (c) => {
   try {
     const { name, lastname, email, password, birthday } = await c.req.json();
     const doesUserExist = await getUserByEmail(email);
@@ -46,7 +46,7 @@ app.post("/register", zValidator("json", RegisterValidator), async (c) => {
   }
 });
 
-app.get("/login", zValidator("query", LoginValidator), async (c) => {
+app.get("/login", validate("query", LoginValidator), async (c) => {
   const { email, password } = c.req.query();
   const user = await getUserByCredentials(email, password);
   if (!user) return c.body(null, 404);
@@ -54,7 +54,7 @@ app.get("/login", zValidator("query", LoginValidator), async (c) => {
   return c.json(token);
 });
 
-app.post("/refresh", zValidator("json", RefreshTokenValidator), async (c) => {
+app.post("/refresh", validate("json", RefreshTokenValidator), async (c) => {
   const { refreshToken } = await c.req.json();
   const token = await refreshAccessToken(refreshToken);
   if (!token) return c.body(null, 406);
