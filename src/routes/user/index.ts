@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { requireAuth } from "../../middlewares/requireAuth";
+import { UserInfo } from "../../models/auth/userInfo";
 
 const app = new Hono();
 
@@ -9,8 +10,8 @@ app.get("/me", requireAuth, async (c) => {
     email: user.email,
     name: user.name,
     lastName: user.lastName,
-    birthDay: user.birthDay,
-  });
+    birthday: user.birthDay,
+  } as UserInfo);
 });
 
 export default app;
