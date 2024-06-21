@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import auth from "./auth/index";
+import auth from "./auth";
 import user from "./user";
 
 const app = new Hono();

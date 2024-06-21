@@ -3,7 +3,7 @@ import { Hono } from "hono";
 import { logger } from "hono/logger";
 import * as dotenv from "dotenv";
 
-import apiRoutes from "./routes";
+import apiRoutes from "@/routes";
 
 dotenv.config();
 const app = new Hono();

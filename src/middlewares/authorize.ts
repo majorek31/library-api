@@ -1,7 +1,7 @@
 import { createMiddleware } from "hono/factory";
 import type { User } from "@prisma/client";
-import { decodeToken } from "../utils/security";
-import { getUserByEmail } from "../repositories/userRepository";
+import { decodeToken } from "@/utils/security";
+import { getUserByEmail } from "@/repositories/userRepository";
 
 type Env = {
   Variables: {
