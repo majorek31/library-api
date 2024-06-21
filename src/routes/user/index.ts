@@ -1,10 +1,10 @@
 import { Hono } from "hono";
-import { requireAuth } from "../../middlewares/requireAuth";
+import { authorize } from "../../middlewares/authorize";
 import { UserInfo } from "../../models/auth/userInfo";
 
 const app = new Hono();
 
-app.get("/me", requireAuth, async (c) => {
+app.get("/me", authorize(), async (c) => {
   const user = c.get("user");
   return c.json({
     email: user.email,
