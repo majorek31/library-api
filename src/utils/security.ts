@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import type { AccessToken } from "../models/auth/accessToken";
+import type { AccessToken } from "@/models/auth/accessToken";
 import type { User } from "@prisma/client";
 import { sign, verify } from "hono/jwt";
 import { JWTPayload } from "hono/utils/jwt/types";
@@ -7,7 +7,7 @@ import { randomBytes } from "crypto";
 import {
   getUserByRefreshToken,
   updateUser,
-} from "../repositories/userRepository";
+} from "@/repositories/userRepository";
 
 export async function generatePasswordHash(password: string): Promise<string> {
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -21,7 +21,7 @@ export async function compareHash(
   return await bcrypt.compare(password, hash);
 }
 
-interface TokenPayload extends JWTPayload {
+export interface TokenPayload extends JWTPayload {
   email: string;
   role: string;
 }
