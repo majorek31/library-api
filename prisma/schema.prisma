@@ -23,4 +23,10 @@ model User {
   passwordHash String
   refreshToken String?
   birthDay     DateTime
+  role         Role     @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
 }

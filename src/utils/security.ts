@@ -35,7 +35,7 @@ export async function createAccessToken(user: User): Promise<AccessToken> {
     {
       email: user.email,
       exp: expirationDate,
-      role: "test-role",
+      role: user.role,
     } as TokenPayload,
     secret,
   );

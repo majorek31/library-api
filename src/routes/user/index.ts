@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { authorize } from "../../middlewares/authorize";
-import { UserInfo } from "../../models/auth/userInfo";
+import { authorize } from "@/middlewares/authorize";
+import { UserInfo } from "@/models/auth/userInfo";
 
 const app = new Hono();
 
@@ -11,6 +11,7 @@ app.get("/me", authorize(), async (c) => {
     name: user.name,
     lastName: user.lastName,
     birthday: user.birthDay,
+    role: user.role,
   } as UserInfo);
 });
 
