@@ -4,9 +4,12 @@ import { logger } from "hono/logger";
 import * as dotenv from "dotenv";
 
 import apiRoutes from "@/routes";
+import { resultHandler } from "@/middlewares/resultHandler";
 
 dotenv.config();
 const app = new Hono();
+
+app.use(resultHandler);
 app.use(logger());
 
 app.route("/api", apiRoutes);
