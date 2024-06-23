@@ -35,27 +35,32 @@ export class Result<T> {
   getStatusCode(): StatusCode {
     return this.#statusCode;
   }
-  static NotFoundError: Result<never> = new Result<never>(
+  static Created: Result<never> = new Result<never>(
+    null,
+    null,
+    201,
+  );
+  static NotFound: Result<never> = new Result<never>(
     null,
     new ApiError("NOT_FOUND"),
     404,
   );
-  static BadRequestError: Result<never> = new Result<never>(
+  static BadRequest: Result<never> = new Result<never>(
     null,
     new ApiError("BAD_REQUEST"),
     400,
   );
-  static AuthorizationError: Result<never> = new Result<never>(
+  static NotAuthorized: Result<never> = new Result<never>(
     null,
     new ApiError("NOT_AUTHORIZED"),
     401,
   );
-  static ForbiddenError: Result<never> = new Result<never>(
+  static Forbidden: Result<never> = new Result<never>(
     null,
     new ApiError("FORBIDDEN"),
     403,
   );
-  static InternalError: Result<never> = new Result<never>(
+  static InternalServerError: Result<never> = new Result<never>(
     null,
     new ApiError("INTERNAL_ERROR"),
     500,
