@@ -1,7 +1,7 @@
 import type { User } from "@prisma/client";
-import { db } from "../utils/database";
-import { RegisterUser } from "../models/user/userRegister";
-import { compareHash } from "../utils/security";
+import { db } from "@/utils/database";
+import { RegisterUser } from "@/models/user/userRegister";
+import { compareHash } from "@/utils/security";
 
 export async function getUserByEmail(email: string): Promise<User | null> {
   const user = await db.user.findUnique({
