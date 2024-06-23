@@ -35,11 +35,7 @@ export class Result<T> {
   getStatusCode(): StatusCode {
     return this.#statusCode;
   }
-  static Created: Result<never> = new Result<never>(
-    null,
-    null,
-    201,
-  );
+  static Created: Result<never> = new Result<never>(null, null, 201);
   static NotFound: Result<never> = new Result<never>(
     null,
     new ApiError("NOT_FOUND"),
