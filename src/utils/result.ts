@@ -2,8 +2,10 @@ import { StatusCode } from "hono/utils/http-status";
 
 export class ApiError {
   errCode: string;
-  constructor(errCode: string) {
+  message: object | null;
+  constructor(errCode: string, message?: object | null) {
     this.errCode = errCode;
+    this.message = message ? message : null;
   }
 }
 
