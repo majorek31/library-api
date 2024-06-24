@@ -9,8 +9,8 @@ import { resultHandler } from "@/middlewares/resultHandler";
 dotenv.config();
 const app = new Hono();
 
-app.use(resultHandler);
 app.use(logger());
+app.use(resultHandler);
 
 app.route("/api", apiRoutes);
 const port = process.env.PORT || 3000;
