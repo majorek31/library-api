@@ -12,7 +12,7 @@ import {
 } from "@/utils/security";
 import { LoginValidator } from "@/validators/loginValidator";
 import { RefreshTokenValidator } from "@/validators/refreshTokenValidator";
-import { validate } from "@/validators/validate";
+import { validate } from "@/middlewares/validate";
 import { Result } from "@/utils/result";
 import { AccessToken } from "@/models/auth/accessToken";
 
